@@ -14,31 +14,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.TextView;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class MainActivity extends AppCompatActivity
+public class Favoriti extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    public static String BASE_URL = "https://api.themoviedb.org";
-    public static int PAGE = 1;
-    public static String API_KEY = "c22d755514350d9836b3f9b173b3d763";
-    public static String LANGUAGE = "en-US";
-    public static String CATEGORY = "popular";
-    public static String CATEGORY2 = "top_rated";
-    private TextView myTextView, myTextView2, myTextView3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_favoriti);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -56,42 +39,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        //Početak kodiranja:
-
-        myTextView = (TextView) findViewById(R.id.tv_naziv);
-        myTextView2 = (TextView) findViewById(R.id.tv_zanr);
-        myTextView3 = (TextView) findViewById(R.id.tv_rejting);
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiInterface myInterface = retrofit.create(ApiInterface.class);
-
-        Call<MovieResults> call = myInterface.listOfMovies(CATEGORY2, API_KEY, LANGUAGE, PAGE);
-
-        call.enqueue(new Callback<MovieResults>() {
-            @Override
-            public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
-
-                MovieResults results = response.body();
-                List<MovieResults.ResultsBean> listOfMovies = results.getResults();
-                MovieResults.ResultsBean movie = listOfMovies.get(1);
-                myTextView.setText(movie.getTitle());
-                //myTextView2.setText(movie.getGenre_ids().get(0));
-                //myTextView3.setText(movie.getPopularity());
-            }
-
-            @Override
-            public void onFailure(Call<MovieResults> call, Throwable t) {
-            }
-        });
-
-
-        //Kraj kodiranja
     }
 
     @Override
@@ -107,13 +54,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.favoriti, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -124,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_glavni_meni) {
